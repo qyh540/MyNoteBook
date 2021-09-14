@@ -1,3 +1,5 @@
+
+
 # linux服务器配置
 
 ##  一、基础配置
@@ -669,8 +671,6 @@ flush privileges;
 
 #### 4. 安装MongoDB
 
-1.配置
-
 - 下载至任意目录(/software)
 
 ```shell
@@ -760,6 +760,152 @@ db.auth('admim', 'xxxxxx')
 >
 > 6 Superuser Roles(超级管理员)：root、(dbOwner、userAdmin、userAdminAnyDatabase这几个角色角色提供了任何数据任何用户的任何权限的能力，拥有这个角色的用户可以在任何数据库上定义它们自己的权限)
 
+#### 5. 安装redis
+
+1.  官网下载[Redis](https://redis.io/)
+
+下载最新的稳定版
+
+![image-20210910134913459](https://myimageshack.oss-cn-hangzhou.aliyuncs.com/img/image-20210910134913459.png)
+
+2.  上传至软件目录
+3.  解压
+
+```bash
+tar -zxvf redis-6.2.5.tar.gz
+```
+
+4.  进入解压后的目录编译(服务器要有gcc环境)
+
+```bash
+cd /opt/redis/redis-6.2.5
+make
+```
+
+5.  安装
+
+```bash
+make PREFIX=/opt/redis/redis6.2.5 install
+```
+
+6.  创建配置文件目录，并复制配置文件
+
+```bash
+sudo mkdir /opt/redis/redis6.2.5/etc/
+sudo cp /opt/redis/redis-6.2.5/redis.conf /opt/redis/redis6.2.5/etc/
+```
+
+7.  修改配置文件
+
+```bash
+sudo vim /opt/redis/redis6.2.5/etc/redis.conf
+
+#修改以下内容
+# bind 127.0.0.1 
+bind 0.0.0.0 -::1
+#修改为0.0.0.0，允许所有ip地址访问，也可以自定义特定IP或网段访问
+
+protected-mode yes
+#是否开启保护模式，默认开启。要是配置里没有指定bind和密码。开启该参数后，redis只会允许本地进行访问，拒绝外部访问。要是开启了密码 和bind，可以开启。否则最好关闭，设置为no。
+port 6379
+#redis监听的端口，默认6379
+
+# daemonize no
+ daemonize yes
+#redis采用的是单进程多线程的模式。当daemonize设置成yes时，代表开启守护进程模式，也就是允许后台运行。在守护进程模式下，redis启动后后台运行，并将进程pid号写入redis.conf选项pidfile配置的文件中。
+
+pidfile /var/run/redis_6379.pid
+#守护进程模式下，pid文件的保存位置，保持默认即可。
+
+loglevel notice
+#日志级别，默认为notice，保持默认即可
+
+#logfile ""
+ logfile /opt/redis/logs/redis.log
+#设置redis日志文件，默认没有。自定义位置，注意要手动创建。
+
+databases 16
+# 默认值为16，默认数据库为0，数据库范围在0-（database-1）之间
+
+
+rdbcompression yes
+# 存储至本地数据库时（持久化到rdb文件）是否压缩数据，默认为yes
+
+dbfilename dump.rdb
+# 本地持久化数据库文件名，默认值为dump.rdb
+
+# dir ./
+ dir /opt/redis/redis/data/
+#可以理解数据库持久化数据存储的目录，必须指定目录而不是文件，如果自定义需要手动创建该目录。就是存放上面dump.rdp文件的位置，累加文件也放在这里。
+
+# requirepass foobared
+ requirepass redis
+#要求客户端在处理任何命令时都要验证身份和密码，即redis的密码。默认是没有的，需要开启并设置。
+```
+
+7.  创建日志目录和数据目录
+
+```bash
+sudo mkdir /opt/redis/redis/data/
+sudo mkdir /opt/redis/redis/logs/
+sudo touch /opt/redis/redis/logs/redis.log
+```
+
+8.  启动
+
+```bash
+sudo ./bin/redis-server ./etc/redis.conf 
+```
+
+9.  查看运行状态
+
+```bash
+#查看端口是否处于监听状态。
+# ss -tnl | grep 6379
+#查看进程
+# ps -ef | grep redis
+```
+
+10.  关闭
+
+```bash
+redis-cli shutdown
+```
+
+11.  配置环境变量
+
+```bash
+sudo vim /etc/profile.d/redis_bin.sh
+
+#添加
+export PATH=$PATH:/opt/redis/redis/bin\
+
+#运行
+source /etc/profile.d/redis_bin.sh
+```
+
+12.  配置开机自启
+
+```bash
+sudo vim /etc/systemd/system/redis.service
+#添加
+[Unit]
+Description=redis-server
+After=network.target
+ 
+[Service]
+Type=forking
+ExecStart=/opt/redis/redis/bin/redis-server /opt/redis/redis/etc/redis.conf
+PrivateTmp=true
+ 
+[Install]
+WantedBy=multi-user.target
+```
+
+参考：
+
+>   [Centos7编译安装redis - 刘晨](https://www.cnblogs.com/lcxhk/p/15141343.html)
+
 ## 五、常用命令
 
 #### 1. 文件互串
@@ -784,3 +930,66 @@ db.auth('admim', 'xxxxxx')
     ```bash
     scp local_path user_name@ip_address:linux_path
     ```
+
+#### 2. 链接操作
+
+-   命令格式：`ln -[参数] [源文件] [链接名]`
+-   参数形式：`[-bdfinsvF] [-S backup-suffix] [-V {numbered,existing,simple}]`
+
+-   必要参数：
+
+    -   -b 删除，覆盖以前建立的链接
+    -   -d 允许超级用户制作目录的硬链接
+    -   -f 强制执行
+    -   -i 交互模式，文件存在则提示用户是否覆盖
+    -   -n 把符号链接视为一般目录
+    -   -s 软链接(符号链接)
+    -   -v 显示详细的处理过程
+
+-   选择参数：
+
+    -   -S "-S<字尾备份字符串> "或 "--suffix=<字尾备份字符串>"
+    -   -V "-V<备份方式>"或"--version-control=<备份方式>"
+    -   --help 显示帮助信息
+    -   --version 显示版本信息
+
+-   软链接：
+
+    1.  软链接，以路径的形式存在。类似于Windows操作系统中的快捷方式
+
+    2.  软链接可以 跨文件系统 ，硬链接不可以
+
+    3.  软链接可以对一个不存在的文件名进行链接
+
+    4.  软链接可以对目录进行链接
+
+-   硬链接：
+
+    1.  硬链接，以文件副本的形式存在。但不占用实际空间。
+
+    2.  不允许给目录创建硬链接
+
+    3. 硬链接只有在同一个文件系统中才能创建
+
+-  解除链接：`unlink [链接名]`
+
+#### 3. tar 压缩、解压
+
+-   命令格式：`tar [-ABcdgGhiklmMoOpPrRsStuUvwWxzZ][-b <区块数目>][-C <目的目录>][-f <备份文件>][-F <Script文件>][-K <文件>][-L <媒体容量>][-N <日期时间>][-T <范本文件>][-V <卷册名称>][-X <范本文件>][-<设备编号><存储密度>][--after-date=<日期时间>][--atime-preserve][--backuup=<备份方式>][--checkpoint][--concatenate][--confirmation][--delete][--exclude=<范本样式>][--force-local][--group=<群组名称>][--help][--ignore-failed-read][--new-volume-script=<Script文件>][--newer-mtime][--no-recursion][--null][--numeric-owner][--owner=<用户名称>][--posix][--erve][--preserve-order][--preserve-permissions][--record-size=<区块数目>][--recursive-unlink][--remove-files][--rsh-command=<执行指令>][--same-owner][--suffix=<备份字尾字符串>][--totals][--use-compress-program=<执行指令>][--version][--volno-file=<编号文件>][文件或目录...]`
+-   主要用法：
+
+```bash
+# 解压
+tar -zxvf [filename]
+# 压缩
+tar -zcvf [filename] 待压缩文件
+# 排除目录中的某些文件，然后进行压缩。
+tar --exclude=目录名/* 或者 文件名 -zcvf 备份文件名.tgz 目录名
+```
+
+-   其他：[Linux tar 命令 | 菜鸟教程](https://www.runoob.com/linux/linux-comm-tar.html)
+
+#### 4. systemctl系统控制
+
+[Systemd 入门教程：命令篇 - 阮一峰的网络日志 - http://www.ruanyifeng.com/](http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html)
+
