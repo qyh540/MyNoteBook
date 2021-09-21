@@ -805,7 +805,7 @@ sudo vim /opt/redis/redis6.2.5/etc/redis.conf
 bind 0.0.0.0 -::1
 #修改为0.0.0.0，允许所有ip地址访问，也可以自定义特定IP或网段访问
 
-protected-mode yes
+protected-mode  
 #是否开启保护模式，默认开启。要是配置里没有指定bind和密码。开启该参数后，redis只会允许本地进行访问，拒绝外部访问。要是开启了密码 和bind，可以开启。否则最好关闭，设置为no。
 port 6379
 #redis监听的端口，默认6379
