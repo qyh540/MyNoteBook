@@ -208,35 +208,35 @@
 | 伪类                                                         | 例子                  | 意义                                                         |
 | ------------------------------------------------------------ | --------------------- | ------------------------------------------------------------ |
 | [:active](https://www.w3school.com.cn/cssref/selector_active.asp) | a:active              | 选择活动的链接。                                             |
-| [:checked](https://www.w3school.com.cn/cssref/selector_checked.asp) | input:checked         | 选择每个被选中的 <input> 元素。                              |
-| [:disabled](https://www.w3school.com.cn/cssref/selector_disabled.asp) | input:disabled        | 选择每个被禁用的 <input> 元素。                              |
-| [:empty](https://www.w3school.com.cn/cssref/selector_empty.asp) | p:empty               | 选择没有子元素的每个 <p> 元素。                              |
-| [:enabled](https://www.w3school.com.cn/cssref/selector_enabled.asp) | input:enabled         | 选择每个已启用的 <input> 元素。                              |
-| [:first-child](https://www.w3school.com.cn/cssref/selector_first-child.asp) | p:first-child         | 选择作为其父的首个子元素的每个 <p> 元素。                    |
-| [:first-of-type](https://www.w3school.com.cn/cssref/selector_first-of-type.asp) | p:first-of-type       | 选择作为其父的首个 <p> 元素的每个 <p> 元素。                 |
-| [:focus](https://www.w3school.com.cn/cssref/selector_focus.asp) | input:focus           | 选择获得焦点的 <input> 元素。                                |
+| [:checked](https://www.w3school.com.cn/cssref/selector_checked.asp) | input:checked         | 选择每个被选中的 `<input>` 元素。                            |
+| [:disabled](https://www.w3school.com.cn/cssref/selector_disabled.asp) | input:disabled        | 选择每个被禁用的 `<input>` 元素。                            |
+| [:empty](https://www.w3school.com.cn/cssref/selector_empty.asp) | p:empty               | 选择没有子元素的每个`<p>`元素。                              |
+| [:enabled](https://www.w3school.com.cn/cssref/selector_enabled.asp) | input:enabled         | 选择每个已启用的 `<input>` 元素。                            |
+| [:first-child](https://www.w3school.com.cn/cssref/selector_first-child.asp) | p:first-child         | 选择作为其父的首个子元素的每个`<p>`元素。                    |
+| [:first-of-type](https://www.w3school.com.cn/cssref/selector_first-of-type.asp) | p:first-of-type       | 选择作为其父的首个`<p>`元素的每个`<p>`元素。                 |
+| [:focus](https://www.w3school.com.cn/cssref/selector_focus.asp) | input:focus           | 选择获得焦点的 `<input>` 元素。                              |
 | [:hover](https://www.w3school.com.cn/cssref/selector_hover.asp) | a:hover               | 选择鼠标悬停其上的链接。                                     |
-| [:in-range](https://www.w3school.com.cn/cssref/selector_in-range.asp) | input:in-range        | 选择具有指定范围内的值的 <input> 元素。                      |
-| [:invalid](https://www.w3school.com.cn/cssref/selector_invalid.asp) | input:invalid         | 选择所有具有无效值的 <input> 元素。                          |
-| [:lang(*language*)](https://www.w3school.com.cn/cssref/selector_lang.asp) | p:lang(it)            | 选择每个 lang 属性值以 "it" 开头的 <p> 元素。                |
-| [:last-child](https://www.w3school.com.cn/cssref/selector_last-child.asp) | p:last-child          | 选择作为其父的最后一个子元素的每个 <p> 元素。                |
-| [:last-of-type](https://www.w3school.com.cn/cssref/selector_last-of-type.asp) | p:last-of-type        | 选择作为其父的最后一个 <p> 元素的每个 <p> 元素。             |
+| [:in-range](https://www.w3school.com.cn/cssref/selector_in-range.asp) | input:in-range        | 选择具有指定范围内的值的 `<input>` 元素。                    |
+| [:invalid](https://www.w3school.com.cn/cssref/selector_invalid.asp) | input:invalid         | 选择所有具有无效值的 `<input>` 元素。                        |
+| [:lang(*language*)](https://www.w3school.com.cn/cssref/selector_lang.asp) | p:lang(it)            | 选择每个 lang 属性值以 "it" 开头的`<p>`元素。                |
+| [:last-child](https://www.w3school.com.cn/cssref/selector_last-child.asp) | p:last-child          | 选择作为其父的最后一个子元素的每个`<p>`元素。                |
+| [:last-of-type](https://www.w3school.com.cn/cssref/selector_last-of-type.asp) | p:last-of-type        | 选择作为其父的最后一个`<p>`元素的每个`<p>`元素。             |
 | [:link](https://www.w3school.com.cn/cssref/selector_link.asp) | a:link                | 选择所有未被访问的链接。                                     |
-| [:not(*selector*)](https://www.w3school.com.cn/cssref/selector_not.asp) | :not(p)               | 选择每个非 <p> 元素的元素。                                  |
-| [:nth-child(*n*)](https://www.w3school.com.cn/cssref/selector_nth-child.asp) | p:nth-child(2)        | 选择作为其父的第二个子元素的每个 <p> 元素。                  |
-| [:nth-last-child(*n*)](https://www.w3school.com.cn/cssref/selector_nth-last-child.asp) | p:nth-last-child(2)   | 选择作为父的第二个子元素的每个<p>元素，从最后一个子元素计数。 |
-| [:nth-last-of-type(*n*)](https://www.w3school.com.cn/cssref/selector_nth-last-of-type.asp) | p:nth-last-of-type(2) | 选择作为父的第二个<p>元素的每个<p>元素，从最后一个子元素计数 |
-| [:nth-of-type(*n*)](https://www.w3school.com.cn/cssref/selector_nth-of-type.asp) | p:nth-of-type(2)      | 选择作为其父的第二个 <p> 元素的每个 <p> 元素。               |
-| [:only-of-type](https://www.w3school.com.cn/cssref/selector_only-of-type.asp) | p:only-of-type        | 选择作为其父的唯一 <p> 元素的每个 <p> 元素。                 |
-| [:only-child](https://www.w3school.com.cn/cssref/selector_only-child.asp) | p:only-child          | 选择作为其父的唯一子元素的 <p> 元素。                        |
-| [:optional](https://www.w3school.com.cn/cssref/selector_optional.asp) | input:optional        | 选择不带 "required" 属性的 <input> 元素。                    |
-| [:out-of-range](https://www.w3school.com.cn/cssref/selector_out-of-range.asp) | input:out-of-range    | 选择值在指定范围之外的 <input> 元素。                        |
-| [:read-only](https://www.w3school.com.cn/cssref/selector_read-only.asp) | input:read-only       | 选择指定了 "readonly" 属性的 <input> 元素。                  |
-| [:read-write](https://www.w3school.com.cn/cssref/selector_read-write.asp) | input:read-write      | 选择不带 "readonly" 属性的 <input> 元素。                    |
-| [:required](https://www.w3school.com.cn/cssref/selector_required.asp) | input:required        | 选择指定了 "required" 属性的 <input> 元素。                  |
+| [:not(*selector*)](https://www.w3school.com.cn/cssref/selector_not.asp) | :not(p)               | 选择每个非`<p>`元素的元素。                                  |
+| [:nth-child(*n*)](https://www.w3school.com.cn/cssref/selector_nth-child.asp) | p:nth-child(2)        | 选择作为其父的第二个子元素的每个`<p>`元素。                  |
+| [:nth-last-child(*n*)](https://www.w3school.com.cn/cssref/selector_nth-last-child.asp) | p:nth-last-child(2)   | 选择作为父的第二个子元素的每个`<p>`元素，从最后一个子元素计数。 |
+| [:nth-last-of-type(*n*)](https://www.w3school.com.cn/cssref/selector_nth-last-of-type.asp) | p:nth-last-of-type(2) | 选择作为父的第二个`<p>`元素的每个`<p>`元素，从最后一个子元素计数 |
+| [:nth-of-type(*n*)](https://www.w3school.com.cn/cssref/selector_nth-of-type.asp) | p:nth-of-type(2)      | 选择作为其父的第二个`<p>`元素的每个`<p>`元素。               |
+| [:only-of-type](https://www.w3school.com.cn/cssref/selector_only-of-type.asp) | p:only-of-type        | 选择作为其父的唯一`<p>`元素的每个`<p>`元素。                 |
+| [:only-child](https://www.w3school.com.cn/cssref/selector_only-child.asp) | p:only-child          | 选择作为其父的唯一子元素的`<p>`元素。                        |
+| [:optional](https://www.w3school.com.cn/cssref/selector_optional.asp) | input:optional        | 选择不带 "required" 属性的 `<input>` 元素。                  |
+| [:out-of-range](https://www.w3school.com.cn/cssref/selector_out-of-range.asp) | input:out-of-range    | 选择值在指定范围之外的 `<input>` 元素。                      |
+| [:read-only](https://www.w3school.com.cn/cssref/selector_read-only.asp) | input:read-only       | 选择指定了 "readonly" 属性的 `<input>` 元素。                |
+| [:read-write](https://www.w3school.com.cn/cssref/selector_read-write.asp) | input:read-write      | 选择不带 "readonly" 属性的 `<input>` 元素。                  |
+| [:required](https://www.w3school.com.cn/cssref/selector_required.asp) | input:required        | 选择指定了 "required" 属性的 `<input>` 元素。                |
 | [:root](https://www.w3school.com.cn/cssref/selector_root.asp) | root                  | 选择元素的根元素。                                           |
 | [:target](https://www.w3school.com.cn/cssref/selector_target.asp) | #news:target          | 选择当前活动的 #news 元素（单击包含该锚名称的 URL）。        |
-| [:valid](https://www.w3school.com.cn/cssref/selector_valid.asp) | input:valid           | 选择所有具有有效值的 <input> 元素。                          |
+| [:valid](https://www.w3school.com.cn/cssref/selector_valid.asp) | input:valid           | 选择所有具有有效值的`<input>`元素。                          |
 | [:visited](https://www.w3school.com.cn/cssref/selector_visited.asp) | a:visited             | 选择所有已访问的链接。                                       |
 
 ### 4. 伪元素选择器
@@ -419,64 +419,117 @@ a[class*="hb"] {
 
 -   `list-style-type`: 属性指定列表项标记的类型。
 
-    >   <custom-ident> – 与@counter-style或预定义样式之一的值匹配的标识符:   
-    >   symbols() – 定义列表的匿名样式。  
-    >   <string> – 指定的字符串将用作项目的标记。  
+    >   `<custom-ident>` – 与@counter-style或预定义样式之一的值匹配的标识符:   
+    >
+    >   symbols() – 定义列表的匿名样式。  `<string>` – 指定的字符串将用作项目的标记。  
+    >
     >   none – 不显示项目标记。  
+    >
     >   disc – 一个实心圆(默认值)。  
+    >
     >   circle - 空心圆。  
+    >
     >   square – 填充的正方形。  
+    >
     >   decimal - 十进制数，从 1 开始。  
+    >
     >   cjk-decimal – cjk-decimal十进制数。  
+    >
     >   decimal-leading-zero - 十进制数，由初始零填充。  
+    >
     >   lower-roman – 小写罗马数字。  
+    >
     >   upper-roman – 大写罗马数字。  
+    >
     >   lower-greek – 小写古典希腊语。  
+    >
     >   lower-alpha, lower-latin – 小写 ASCII 字母。  
+    >
     >   upper-alpha, upper-latin – 大写 ASCII 字母。  
+    >
     >   arabic-indic, -moz-arabic-indic – 阿拉伯-印度数字。  
+    >
     >   armenian -传统的亚美尼亚编号。  
+    >
     >   孟加拉语bengali, -moz-bengali – 孟加拉语编号。  
+    >
     >   cambodian/khmer -柬埔寨/高棉编号。  
+    >
     >   cjk-earthly-branch, -moz-cjk-earthly-branch – 汉族“地支”序数。  
+    >
     >   cjk-heavenly-stem, -moz-cjk-heavenly-stem – 汉族“天干”序数。  
+    >
     >   cjk-ideographic – 与trad-chinese-informal相同。
     >
     >   devanagari, -moz-devanagari – 梵文编号。  
+    >
     >   ethiopic-numeric – 埃塞俄比亚编号。  
+    >
     >   georgian – 传统的格鲁吉亚编号。  
+    >
     >   gujarati, -moz-gujarati – 古吉拉特语编号。  
+    >
     >   gurmukhi, -moz-gurmukhi – Gurmukhi 编号。  
+    >
     >   hebrew -传统希伯来语编号  
+    >
     >   hiragana - 字典顺序平假名字母。  
+    >
     >   hiragana-iroha – Iroha 阶 平假名刻字  
-    >   japanese-formal – 用于法律或财务文件的日本正式编号。 汉字的设计使得它们不能被修改为看起来像另一个正确的。  
+    >
+    >   japanese-formal – 用于法律或财务文件的日本正式编号。 汉字的设计使得它们不能被修改为看起来像另一个正
+    >
+    >   的。  
+    >
     >   japanese-informal – 日本非正式编号。  
+    >
     >   kannada, -moz-kannada – 卡纳达语编号。  
+    >
     >   katakana – 字典顺序片假名字母  
+    >
     >   katakana-iroha – Iroha 顺序 片假名刻字  
+    >
     >   korean-hangul-formal – 韩文编号。  
+    >
     >   korean-hanja-formal – 正式的韩文编号。  
+    >
     >   korean-hanja-informal – 韩文汉字编号。  
+    >
     >   lao, -moz-lao – 老挝语编号。  
+    >
     >   lower-armenian亚美尼亚语 - 小写亚美尼亚语编号。  
+    >
     >   malayalam, -moz-malayalam语malayalam, -moz-malayalam – 马拉雅拉姆语编号。  
+    >
     >   mongolian – 蒙古文编号。  
+    >
     >   myanmar, -moz-myanmar – 缅甸(缅甸)编号。  
+    >
     >   oriya, -moz-oriya – 奥里亚语编号。  
+    >
     >   persian - 波斯语编号  
+    >
     >   simp-chinese-formal – 简体中文正式编号。  
+    >
     >   simp-chinese-informal – 简体中文非正式编号。  
+    >
     >   tamil语——泰米尔语编号。  
+    >
     >   telugu, -moz-telugu固语telugu, -moz-telugu – 泰卢固语编号。  
+    >
     >   thai, -moz-thai – 泰语编号。
     >
     >   tibetan ——藏语编号。  
+    >
     >   trad-chinese-formal – 繁体中文正式编号。  
+    >
     >   trad-chinese-informal – 繁体中文非正式编号。  
+    >
     >   upper-armenian Armenian – 传统的大写亚美尼亚语编号。  
-    >   disclosure-open - 表示disclosure-open诸如<details>类的披露小部件的符号。  
-    >   disclosure-closed - 表示公开小部件(例如<details>已关闭的符号。
+    >
+    >   disclosure-open - 表示disclosure-open诸如`<details>`类的披露小部件的符号。  
+    >
+    >   disclosure-closed - 表示公开小部件(例如`<details>`已关闭的符号。
 
 -   `list-style-position`: 属性指定列表项标记(项目符号)的位置。
 
@@ -818,16 +871,16 @@ p {
 | run-in             | 此元素会根据上下文作为块级元素或内联元素显示。               |
 | compact            | CSS 中有值 compact，不过由于缺乏广泛支持，已经从 CSS2.1 中删除。 |
 | marker             | CSS 中有值 marker，不过由于缺乏广泛支持，已经从 CSS2.1 中删除。 |
-| table              | 此元素会作为块级表格来显示（类似 <table>），表格前后带有换行符。 |
-| inline-table       | 此元素会作为内联表格来显示（类似 <table>），表格前后没有换行符。 |
-| table-row-group    | 此元素会作为一个或多个行的分组来显示（类似 <tbody>）。       |
-| table-header-group | 此元素会作为一个或多个行的分组来显示（类似 <thead>）。       |
-| table-footer-group | 此元素会作为一个或多个行的分组来显示（类似 <tfoot>）。       |
-| table-row          | 此元素会作为一个表格行显示（类似 <tr>）。                    |
-| table-column-group | 此元素会作为一个或多个列的分组来显示（类似 <colgroup>）。    |
-| table-column       | 此元素会作为一个单元格列显示（类似 <col>）                   |
-| table-cell         | 此元素会作为一个表格单元格显示（类似 <td> 和 <th>）          |
-| table-caption      | 此元素会作为一个表格标题显示（类似 <caption>）               |
+| table              | 此元素会作为块级表格来显示（类似 `<table>`），表格前后带有换行符。 |
+| inline-table       | 此元素会作为内联表格来显示（类似 `<table>`），表格前后没有换行符。 |
+| table-row-group    | 此元素会作为一个或多个行的分组来显示（类似 `<tbody>`）。     |
+| table-header-group | 此元素会作为一个或多个行的分组来显示（类似 `<thead>`）。     |
+| table-footer-group | 此元素会作为一个或多个行的分组来显示（类似 `<tfoot>`）。     |
+| table-row          | 此元素会作为一个表格行显示（类似 `<tr>`）。                  |
+| table-column-group | 此元素会作为一个或多个列的分组来显示（类似 `<colgroup>`）。  |
+| table-column       | 此元素会作为一个单元格列显示（类似 `<col>`）                 |
+| table-cell         | 此元素会作为一个表格单元格显示（类似 `<td>` 和 `<th>`）      |
+| table-caption      | 此元素会作为一个表格标题显示（类似 `<caption>`）             |
 | inherit            | 规定应该从父元素继承 display 属性的值。                      |
 
 ### 2. 溢出相关
