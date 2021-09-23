@@ -157,6 +157,7 @@ db.collection.deleteOne()
 db.collection.deleteMany()
 ```
 
+
 ### 3. 用户角色管理
 
 #### 1. 角色管理
@@ -221,8 +222,6 @@ db.revokeRolesFromUser()	#从用户删除角色。
 db.updateUser()	#更新用户数据。
 passwordPrompt()	#提示输入密码，以作为在各种mongoShell用户身份验证/管理方法中直接指定密码的替代方法。
 ```
-
-
 
 # 三、Redis
 
