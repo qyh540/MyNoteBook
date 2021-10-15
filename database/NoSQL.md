@@ -272,6 +272,8 @@ passwordPrompt()	#提示输入密码，以作为在各种mongoShell用户身份�
 
 #### 4. `Hash`散列
 
+
+
 -   Redis的散列可以存储多个键值对之间的映射。和字符串一样，散列存储的值既可以是字符串又可以是数字值，并且用户同样可以对散列存储的数字值执行自增操作或者自减操作。
 
 ![image-20210922195124165](https://myimageshack.oss-cn-hangzhou.aliyuncs.com/img/image-20210922195124165.png)
