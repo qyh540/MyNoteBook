@@ -1,5 +1,3 @@
-
-
 # linux服务器配置
 
 ##  一、基础配置
@@ -153,7 +151,7 @@ git clone https://gitee.com/mirrors/oh-my-zsh.git
 2. 安装
 
 ```bash
-cd ~/.oh-my-zsh/tools
+cd ~/oh-my-zsh/tools
 ./install.sh
 ```
 
@@ -285,6 +283,14 @@ normal o
 normal o
 endfunc
 autocmd bufnewfile *.py call SetTitle()
+```
+
+2.  使用其他配置
+
+```bash
+git clone https://github.com/youngyangyang04/PowerVim.git
+cd PowerVim
+sh install.sh
 ```
 
 

@@ -185,7 +185,7 @@ show databases;
 
 #### 1. **unsigned**
 
--   无符号数值，只适用于数值类型
+-   无符号数值，只适用于数值类型，位置在not null前
 
 -   声明该列不能为负数
 
@@ -938,7 +938,17 @@ alter table `tablename`
         select * from `table_name` limit num; -- 查询num条
         ```
 
-2.  排序：`order by`
+2.  偏移：`offset`：
+
+    -   跳过几条数据，和`limit`配合使用，先跳再选。
+    -   常用语法：
+
+    ```sql
+    -- 选择第4条(跳过前3条只选择1条)
+    select * from tablename limit 1 offset 3;
+    ```
+
+3.  排序：`order by`
 
     -   **==desc==**：降序
     -   ==**asc**==：升序(默认)
@@ -946,7 +956,7 @@ alter table `tablename`
     -   常用语法：
 
         ```sql
-        -- order by 默认降序
+        -- order by 默认升序
         select * from `table_name` order by `col_name` [desc | asc];
         ```
 

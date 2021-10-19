@@ -67,7 +67,7 @@
     [alias]
     	co = checkout
     	ci = commit
-    	st = status
+    	  = status
     	br = branch
     	unstage = reset HEAD --
     	last = log -1 HEAD
@@ -331,7 +331,7 @@ git push --delete origin 旧分支名
 git push origin 新分支名
 
 #将新本地分支和远程相连 
-git branch --set-upstream-to origin/新分支名
+git branch - -set-upstream-to origin/新分支名
 
 # 查看工作区文件和暂存区文件区别
 git diff
