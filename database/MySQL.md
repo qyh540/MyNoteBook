@@ -1,3 +1,5 @@
+[TOC]
+
 # MySQL学习
 
 ## 一、初识MySQL
@@ -168,6 +170,8 @@ show databases;
 -   ==**text**：文本串，常用来保存大文本，最大长度2^16-1==
 
 #### 3. 日期时间
+
+>   ==时间越接近现在，值越大==
 
 -   **date：YYYY-MM-DD** 格式的日期
 -   **time：HH:mm:ss** 格式的时间
@@ -1012,7 +1016,12 @@ where写在group by前面.
     -- 等价于
     select * from `table_name` inner join `table_2` using(`col_name`);
     ```
-### 4.8 其他
+
+### 4.8 partition分区
+
+
+
+### 4.9 参考
 
 -   参考：
     1.  [MySQL的JOIN（一）：用法 - 付大石 - 博客园](https://www.cnblogs.com/fudashi/p/7491039.html)
@@ -1090,6 +1099,19 @@ where写在group by前面.
     -- YEAR   年
     ```
 
+-   排序函数
+
+    ```sql
+    row_number() -- 依次递增排名，无重复排名
+    rank() -- 相同分数有重复排名，但是重复后下一个人按照实际排名
+    dense_rank() -- 分数一致排名一致，分数不一致排名+1
+    ntile(4) -- 分组排名，里面的数字是几，最多排名就是几，里面的数字是4，最多的排名就是4
+    -- 以上函数通常和 over()配合使用，如
+    select score, dense_rank() over([partition by ...] order by score desc) from scores;
+    ```
+
+    
+
 -   系统信息函数
 
     ```sql
@@ -1137,6 +1159,18 @@ where写在group by前面.
     */
     
     select sum(studentresult) as 总和 from result;
+    -- sum() 可以与over()配合使用如：
+    -- 例如
+    -- a b
+    -- 1 2
+    -- 3 4
+    -- 5 6
+    -- 按照b列排序，将a依次相加，得到结果，如下:
+    -- a  b  sum(a) over (order by b)：
+    -- 1 2    1
+    -- 3 4    1+3
+    -- 5 6    1+3+5
+    select sum(studentresult) over(order by id)
     select avg(studentresult) as 平均分 from result;
     select max(studentresult) as 最高分 from result;
     select min(studentresult) as 最低分 from result;
@@ -1250,7 +1284,7 @@ where `name` = 'kuangshen'
     max();
     min();
     avg();
-    group_concat(); --将值串连
+    group_concat(); -- 将值串连
     
     -- 其他常用函数
     md5(); -- md5加密
