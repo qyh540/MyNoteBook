@@ -363,7 +363,7 @@ javac -version
 
     ```bash
     cd ./Python-3.8.11
-    ./configure --prefix=/usr/local/python38 && make && make install
+    ./configure --enable-optimizations --prefix=/usr/local/python38 && make && make install
     ```
 
 6. 将之前的备份后解除链接
