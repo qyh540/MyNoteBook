@@ -1291,9 +1291,98 @@ where `name` = 'kuangshen'
     default(); -- 获取字段默认值
     ```
 
-## 六、事务
+## 六、视图
 
-### 6.1 事务简介
+### 6.1 视图简介
+
+-   视图是虚拟的表。与包含数据的表不一样，视图只包含使用时动态检索数据的查询。
+-   用来创建视图的表叫作基表(base table)，每个视图的基表可以有多个。
+-   视图的作用：
+    -   重用SQL语句。
+    -   简化复杂的SQL操作。在编写查询后，可以方便地重用它而不必知道它的基本查询细节。
+    -   使用表的组成部分而不是整个表。
+    -   保护数据。可以给用户授予表的特定部分的访问权限而不是整个表的访问权限。
+    -   更改数据格式和表示。视图可返回与底层表的表示和格式不同的数据。
+-   在视图创建之后，可以用与表基本相同的方式利用它们。可以对视图执行SELECT操作，过滤和排序数据，将视图联结到其他视图或表，甚至能添加和更新数据。
+-   视图的规则和限制：
+    -   与表一样，视图必须唯一命名（同一数据库中不能给视图取与别的视图或表相同的名字）。
+    -   对于可以创建的视图数目没有限制。
+    -   为了创建视图，必须具有足够的访问权限。这些限制通常由数据库管理人员授予。
+    -   视图可以嵌套，即可以利用从其他视图中检索数据的查询来构造一个视图。
+    -   `ORDER BY`可以用在视图中，但如果从该视图检索数据`SELECT`中也含有`ORDER BY`，那么该视图中的`ORDER BY`将被覆盖。
+    -   视图不能索引，也不能有关联的触发器或默认值。
+    -   视图可以和表一起使用。例如，编写一条联结表和视图的SELECT语句。
+
+### 6.2 视图具体使用
+
+#### 1. 创建视图
+
+-   使用`create view`语句创建视图：
+
+```sql
+--    如果存在则替换   视图选择算法    默认选项
+create [or replace] [algorithm = {undefined | merge | temptable}]
+	--   视图名      可以自定义列名
+	view view_name [(column_list)]
+	-- select语句
+	as select_statement
+	-- 表示视图在更新时保证在视图的权限范围之内
+    [with [cascaded | local] check option];
+    
+-- 展示视图创建语句
+show create view view_name;
+```
+
+-   `cascade`是默认值，表示在更新视图时要满足视图和列表的相关条件。
+-   在创建视图时推荐使用`with check option`子句，以保证数据的安全性 
+
+#### 2. 视图更改
+
+-   使用`alter`语句更改：
+
+```sql
+alter view view_name as select_statement;
+```
+
+-   使用`DML`语句更改：
+
+```sql
+-- 等同于对普通表进行DML操作
+update view_name set col_name = XXX where condition_list;
+insert XXX
+delete XXX
+```
+
+-   因为视图本身没有数据，因此对视图进行的DML操作最终都会体现在基表中。
+
+-   当以下情况时无法使用`DML`语句修改视图：
+    -   select子句中包含distinct关键字
+    -   select子句中包含组函数(max()、sum()等)
+    -   select语句中包含group by子句
+    -   select语句中包含order by子句
+    -   select语句中包含union 、union all等集合运算符
+    -   where子句中包含相关子查询
+    -   from子句中包含多个表
+    -   如果视图中有计算列，则不能更新
+    -   如果基表中有某个具有非空约束的列未出现在视图定义中，则不能做insert操作
+
+#### 3. 删除视图
+
+-   使用`drop`语句删除视图
+
+```sql
+drop view [if exists] view_name;
+```
+
+### 其他
+
+参考：
+
+-   [深入解析MySQL视图VIEW - GeaoZhang](https://www.cnblogs.com/geaozhang/p/6792369.html)
+
+## 七、事务
+
+### 7.1 事务简介
 
 -   什么是：**将一组sql放在一个批次中去执行，==要么都成功，要么都失败==(只要有一句sql报错就算失败)**
 
@@ -1338,7 +1427,7 @@ where `name` = 'kuangshen'
         | TRANSACTION_READ_UNCOMMITTED | 指示可以发生脏读 (dirty read)、不可重复读和虚读 (phantom read) 的常量。 |
         |  TRANSACTION_READ_COMMITTED  |     指示不可以发生脏读的常量；不可重复读和虚读可以发生。     |
 
-### 6.2 执行事务
+### 7.2 执行事务
 
 -   流程、语法：
 
@@ -1413,7 +1502,7 @@ method(){
 	...
 	try(){
 		业务代码;
-		commit();
+		commi();
 	}catch(){
 		rollback()
 	}
@@ -1421,18 +1510,16 @@ method(){
 }
 ```
 
-
-
-### 6.3 其他
+### 7.3 其他
 
 -   参考：
     1.  [事务ACID理解_dengjili的专栏-CSDN博客](https://blog.csdn.net/dengjili/article/details/82468576)
 
-## 七、索引
+## 八、索引
 
 >MySQL官方对索引的定义为：索引（Index）是帮助MySQL高效获取数据的数据结构。提取句子主干，就可以得到索引的本质：索引是数据结构。
 
-### 7.1 索引分类
+### 8.1 索引分类
 
 -   **[主键索引(Primary Key)](#7. primary key)**
 
@@ -1471,9 +1558,8 @@ method(){
     */
     ```
 
-    
 
-### 7.2 索引的使用
+### 8.2 索引的使用
 
 -   基础语法
 
@@ -1544,7 +1630,7 @@ method(){
     create index id_app_user_name on app_user(name);
     ```
 
-### 7.3 索引原则
+### 8.3 索引原则
 
 -   索引不是越多越好。
 -   不要对经常变动的变量加索引
@@ -1554,7 +1640,7 @@ method(){
     -   hash：
     -   btree：innodb的默认索引类型
 
-### 7.4 其他
+### 8.4 其他
 
 -   参考：
 
@@ -1563,9 +1649,9 @@ method(){
     3.  [MySQL索引知识总结_CrankZ的博客-CSDN博客](https://blog.csdn.net/CrankZ/article/details/80468760)
 
 
-## 八、权限管理和备份
+## 九、权限管理和备份
 
-### 8.1 用户管理
+### 9.1 用户管理
 
 -   用户表：mysql.user
 
@@ -1615,7 +1701,7 @@ method(){
 
       5、定期清理不需要的用户。回收权限或者删除用户。
 
-### 8.2 数据库备份
+### 9.2 数据库备份
 
 -   为什么要备份：
 
@@ -1686,11 +1772,11 @@ method(){
     | SHUTDOWN                | 服务器管理             | 关闭数据库权限                                               |
     | SUPER                   | 服务器管理             | 执行kill线程权限                                             |
 
-## 九、**==规范数据库设计(三大范式)==**
+## 十、**==规范数据库设计(三大范式)==**
 
 >   **==当数据库比较复杂时，我们就需要设计数据库==**
 
-### 9.1 对比
+### 10.1 对比
 
 -   糟糕的数据库设计：
     -   数据冗余，浪费空间
@@ -1701,7 +1787,7 @@ method(){
     -   保证数据库的完整性
     -   方便开发系统
 
-### 9.2 软件开发中，关于数据库的设计
+### 10.2 软件开发中，关于数据库的设计
 
 #### 1. 要点
 
@@ -1809,7 +1895,7 @@ method(){
       default charset = utf8 comment ='粉丝中间表';
     ```
 
-### 9.2 三大范式
+### 10.2 三大范式
 
 #### 1. 为什么需要数据规范化？
 
@@ -1839,20 +1925,20 @@ method(){
 -   有时会故意给一些表增加冗余字段，使其从多表查询变为单表查询。
 -   有时会故意增加一些计算列，使之从大数据量的查询降低为小数据量的查询如索引。
 
-### 9.3 其他
+### 10.3 其他
 
 -   参考：
     1.  [关系型数据库设计：三大范式的通俗理解 - 景寓6号 - 博客园](https://www.cnblogs.com/wsg25/p/9615100.html)
     2.  [【数据库】数据库入门（七）: 函数依赖（Functional Dependencies） - 简书](https://www.jianshu.com/p/f525c2e91fb4)
     3.  [关系型数据库的设计理论（异常、函数依赖、范式）_u013617791的专栏-CSDN博客](https://blog.csdn.net/u013617791/article/details/83041560)
 
-## 十、**==JDBC(重点)==**
+## 十一、**==JDBC(重点)==**
 
-### 10.1 数据库驱动
+### 11.1 数据库驱动
 
 -   定义：数据库驱动是不同数据库开发商（比如oracle mysql等）为了某一种开发语言环境（比如java）能够实现数据库调用而开发的一个程序，他的作用相当于一个翻译人员，将Java中对数据库的调用语言翻译成数据库自己的数据库语言，当然这个翻译（数据库驱动）是由各个开发商针对统一的接口自定义开发的。
 
-### 10.2 JDBC简介
+### 11.2 JDBC简介
 
 >   JDBC 指 Java 数据库连接，是一种标准Java应用编程接口（ JAVA API），用来连接 Java 编程语言和广泛的数据库。JDBC API 库包含下面提到的每个任务，都是与数据库相关的常用用法。
 
@@ -1874,11 +1960,8 @@ method(){
         </dependency>
         ```
 
-        
 
-<img src="./../markdownRes/mysql/jdbc.jpg" style="zoom:150%;" />
-
-### 10.3 第一个JDBC程序
+### 11.3 第一个JDBC程序
 
 ```java
 package com.wlq.lesson1;
@@ -1939,7 +2022,7 @@ public class JdbcFirstDemo {
 4.  获得返回结果集ResultSet
 5.  释放连接
 
-### 10.4 Statement类
+### 11.4 Statement类
 
 >   **==JDBC中的Statement对象用于向数据库发送SQL语句，想完成对数据库的增删改查，只需要通过这个对象向数据库发送增删改查的sql语句即可==**
 >
@@ -2210,7 +2293,7 @@ public class JdbcFirstDemo {
     wlq
     ```
 
-### 10.4 PreparedStatement类
+### 11.4 PreparedStatement类
 
 >   PrepareStatement类是Statement的子类，通过预编译sql语句在传入参数来执行，相比于Statement可以防止SQL注入，效率更高。
 
@@ -2377,7 +2460,7 @@ public class JdbcFirstDemo {
     wlq
     ```
 
-### 10.5 JDBC事务
+### 11.5 JDBC事务
 
 #### 1. 代码实现
 
@@ -2441,7 +2524,7 @@ public class TestTransaction1 {
 }
 ```
 
-### 10.6 数据库连接池
+### 11.6 数据库连接池
 
 >   数据库连接 --> 执行完毕 --> 释放 --> 再连接......  释放   十分浪费系统资源
 >
