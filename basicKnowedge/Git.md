@@ -65,14 +65,15 @@
     [core]
     	editor = vim
     [alias]
+    	gs = git status
     	co = checkout
     	ci = commit
-    	  = status
+    	st = status
     	br = branch
     	unstage = reset HEAD --
     	last = log -1 HEAD
     ```
-
+    
     
 
 ## 3.Git基本原理(重点)
@@ -80,8 +81,6 @@
 - 工作区域划分：
 
     - Git有三个工作区域：工作目录(Working Directory)、暂存区(Stage/Index)、资源库(Repository或Git Directory)，如果在算上远程Git仓库(Remote Directory)就可以划分为4个工作区域，文件在这四个区域之间转换关系如下图所示。
-
-        <img src="https://myimageshack.oss-cn-hangzhou.aliyuncs.com/img/02.jpg" style="zoom:50%;" />
 
     - Working Directory/Workspace：工作区，就是你平时存放代码的地方。
 
@@ -128,7 +127,7 @@
 
 - 文件的4种状态：
 
-    - **Untracked**：未跟踪，此文件在文件夹中，单并没有加入到Git库不参与版本控制，通过`git add`状态变为`staged`。
+    - **Untracked**：未跟踪，此文件在文件夹中，但并没有加入到Git库不参与版本控制，通过`git add`状态变为`staged`。
 
     - **Unmodified**：文件已入库未修改，即版本库中文件快照内容与文件夹中完全一致，如果被修改状态变为`Modified`，如果使用`git rm`移出版本库则状态变为`Untracked`。
 
@@ -252,20 +251,68 @@
 
 ## 6.Git命令
 
-```bash
-# 初始化文件夹
-git init <file>
+>   命令别名：
+>
+>   gs = git status
+>   co = checkout
+>   ci = commit
+>   st = status
+>   br = branch
 
+-   查看状态信息
+
+```bash
 # 查看工作区和仓库文件状况
 git status
 # 缩减
 git status -s
+```
 
-# 将工作区文件添加到暂存区
-git add --all  # 或者 git add .
+-   将文件提交到暂存区&取消暂存
+
+>   使用场景：
+>
+>   将新建的文件或修改过的文件添加到暂存区
+>
+>   untracked --> staged
+>
+>   将暂存区文件取消暂存
+>
+>   staged --> untracked
+
+```bash
+# 添加到暂存
+# 针对文件单独添加
 git add <file>
+# 添加所有
+git add --all
+git add .
+git add -A
 
+# 取消暂存
+git reset HEAD <file>
+```
+
+-   查看暂存文件的区别
+
+```bash
+# 查看已暂存和本地工作区之间的区别
+# staged  untracked
+git diff <file>
+
+# 查看已暂存和上一次提交的区别
+# staged unmofidied
+git diff --cache <file>
+
+# 查看本地工作区和上一次提交的区别
+git diff HEAD
+```
+
+-   提交修改&撤销提交
+
+```bash
 # 提交到本地仓库
+# 用简要信息提交
 git commit -m "msg" <file>
 # 或者详细信息
 git commit <file>
@@ -273,6 +320,16 @@ git commit <file>
 #第二行：空
 #第三行以后：记述更改的原因和详细内容
 
+# 直接将修改后的文件提交(不用add)
+git commit -am 'XXX' <file>
+
+# 撤销上一次提交发起新的提交
+git commit --amend
+```
+
+-   查看提交历史
+
+```bash
 # 查看提交日志
 git log
 # 缩短版
@@ -283,12 +340,17 @@ git log --pretty=oneline/short/full/fuller
 git log -p -限制条数 -- <file>
 # 以图的形式展示日志
 git log --graph
+```
 
-# 查看工作区和最新提交间的差别
-git diff
+-   分支使用
 
+```bash
 # 列出分支(有*的是当前分支)
-git branch [--list]
+git branch
+# 查看已经被合并到当前分支的分支
+git branch --merged
+# 查看尚未被合并到当前分支的分支
+git branch --no-merged
 
 # 创建并切换分支
 git checkout -b <branch>
@@ -301,77 +363,98 @@ git checkout <branch>
 # 切换回上一个分支
 git checkout -
 
-# 合并分支
-git merge --no-ff <branch>
-
-# 回溯版本
-git reset --hard <hash>
-
-# 查看历史操作
-git reflog
-
-# 修改提交信息
-git commit --amend
-
-# 回滚工作区修改
-git restore <file>
-
-# 添加+提交(对工作区新创建的文件必须要用git add来添加)
-git commit -am "msg"
-
 # 修改分支名
 git branch -m 旧分支名 新分支名
 # 删除本地分支
-git branch --delete <branch>
+git branch -d <branch>
+# 强制删除
+git branch -D <branch>
 
-# 删除远程分支
-git push --delete origin 旧分支名
+#将新本地分支和远程相连
+git branch --set-upstream-to origin/新分支名
 
-# 将新分支名推上去 
-git push origin 新分支名
-
-#将新本地分支和远程相连 
-git branch - -set-upstream-to origin/新分支名
-
-# 查看工作区文件和暂存区文件区别
-git diff
-# 查看暂存区文件和最后一次提交文件区别
-git diff --staged #或者--cached
-
-# 删除文件
-git rm <file>
-# 只删除暂存区
-git rm --cached <file>
-
-# 改名
-git mv
-
-# 取消提交
-git commit --amend
-
-# 取消暂存
-git reset HEAD <file>
-#等价于
-git unstage <file>
-
-# 将工作区文件回滚到第一次提交时
-git co -- <file>
-
-# 连接远程仓库    origin    url简称
-git remote add <remote> <shortname> <url>
-# 查看连接
-git remote -v
-# 抓取
-git fetch <remote>
-# 推送
-git push <remote> <branch>
-# 初始化推送(第一次)
-git push -u <romote> <branch>
-
-
+# 合并分支
+git merge --no-ff <branch>
 ```
 
+-   合并&还原提交
 
+```bash
+# head后面跟几就是合并几个提交
+git rebase -i HEAD~2
+
+# 恢复某次提交的状态，恢复动作本身也创建次提交对象
+git revert <hash>
+# 恢复最后一次提交的状态
+git revert HEAD
+```
+
+-   回溯历史版本
+
+```bash
+# 将HEAD指向该版本hash即可(慎用)
+git reset --hard <hash>
+
+# 查看历史命令用来回推版本
+git reflog
+```
+
+-   撤销本地工作区修改，恢复为暂存区文件内容(add后的)
+
+```bash
+git checkout -- <file>
+git restore <file>
+```
+
+-   远程操作
+
+```bash
+# 查看远程仓库别名
+git remote
+# 查看别名及远程仓库url
+git remote -v
+# 查看指定远程仓库信息
+git remote show <remote>
+
+# 克隆下来的仓库默认远程仓库名为origin，地址为克隆地址
+# 添加远程仓库
+git remote add <remote> <url>
+
+# 修改远程仓库别名
+git remote rename <old> <new>
+
+# 删除远程仓库
+git remote remove <remote>
+git remote rm <remote>
+
+# 推送到远程仓库(首次推送加-u之后可不用)
+git push -u <remote> <branch>
+
+# 获取远程仓库数据
+git fetch <remote>
+git merge <remote>
+# 等价于
+git pull
+
+# 获取远程分支
+git checkout -b <branch> origin/<branch>
+
+# 删除远程分支
+git push origin --delete <branch>
+```
+
+-   删除&移动文件
+
+```bash
+# 删除
+git rm -f <file>
+git rm --cached <file>
+
+# 移动
+git mv
+```
+
+-   总
 
 ```bash
 # 查看、添加、提交、删除、找回，重置修改文件
@@ -556,5 +639,24 @@ git branch --set-upstream develop origin/develop
     git config --global http.postBuffer 20M
     ```
 
+3.  `git pull 报错error: Your local changes to the following files would be overwritten by merge`
+
+    ```bash
+    # 1.让服务器代码覆盖本地代码(可能丢失本地最新更改)
+    # 回溯到上次提交
+    git reset --hard
+    git pull origin master
     
+    # 2.不让远程仓库代码覆盖本地代码
+    # 先将本地文件暂存
+    git stash
+    # 拉取远程代码
+    git pull origin master
+    # 删除暂存
+    git stash drop
+    ```
+
+    
+
+
 
