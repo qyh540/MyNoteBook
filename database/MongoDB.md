@@ -23,7 +23,7 @@
 -   文档键值对有序，键不能重复。
 -   下列文档皆不相同：
 
-```json
+```js
 {"foo": 3}
 {"Foo": 3}
 {"foo": "3"}
@@ -72,6 +72,8 @@
 
 ### 5. 基础命令
 
+>在不另外说明的情况下本文所有命令中的`collection`、`col`均指代集合名。使用时由读者自行修改。
+
 #### 1. 连接Mongo Shell
 
 -   常用参数：`host、port、username、password、authenticationDatabase`
@@ -93,7 +95,7 @@ mongo --username <username> --password <password> --authenticationDatabase <data
 
 -   其他操作
 
-```shell
+```js
 # 查看当前数据库
 db
 
@@ -126,7 +128,32 @@ db.help()
 db.colleciton.help()
 ```
 
-#### 2. CRUD操作
+#### 2. 数据库、集合管理
+
+-   创建&删除数据库
+
+```js
+# 使用use创建
+# 要在数据库中创建集合并插入数据后数据库才会显示
+use newdb
+
+# 使用dropDatabase()函数删除当前使用数据库
+db.dropDatabase()
+```
+
+-   创建&删除集合
+
+```js
+# 创建
+db.createCollection(name, options)
+# 或者在插入时自动创建
+db.collection.insertOne()
+
+# 删除
+db.collection.drop()
+```
+
+#### 3. CRUD操作
 
 ##### 1. 插入(Create)
 
@@ -136,38 +163,51 @@ db.colleciton.help()
 >
 >   连续输入3次`Enter`则结束(废弃)当前输入命令进入下一次输入。
 
-```bash
+-   mongodb在插入文档时会进行校验，如果文档没有`_id`字段就会自动增加一个，还会对文档的大小进行校验，所有文档都必须小于`16MB`。
+
+```js
 # 插入单条记录
-db.collection.insertOne({xx:xx, ...})
+db.collection.insertOne(dataDict)
 
 #插入多条记录
-db.collection.insertMany([{xx:xx, ..}, {...}])
+db.collection.insertMany(d)
 ```
 
 ##### 2. 查找(Read)
 
-```bash
+```js
 # 查询
-db.collection.find({xx:xx})
+db.collection.find(conditionDict)
+
+# 统计条数
+db.collection.find(conditionDict).count()
 ```
 
 ##### 3. 更新(Update)
 
-```bash
-db.collection.updateOne()
-db.collection.updateMany()
+```js
+db.collection.updateOne(conditionDict, valueDict)
+db.collection.updateMany(conditionDict, valueDicts)
 db.collection.replaceOne()
+
+db.collection.
 ```
 
 ##### 4. 删除(Delete)
 
-```bash
+```js
 db.collection.deleteOne()
 db.collection.deleteMany()
+
+# 清空集合中所有文档
+db.collection.remove()
+
+# 删除集合速度快但不能指定条件
+db.collection.drop()
 ```
 
 
-#### 3. 用户角色管理
+#### 4. 用户角色管理
 
 ##### 1. 角色管理
 
@@ -199,7 +239,7 @@ db.collection.deleteMany()
 
 
 
-```bash
+```js
 db.createRole()	#创建一个角色并指定其特权。
 db.dropRole()	#删除用户定义的角色。
 db.dropAllRoles()	#删除与数据库关联的所有用户定义角色。
@@ -219,7 +259,7 @@ db.updateRole()	#更新用户定义的角色。
 >   先在admin数据库中创建角色为userAdmin或userAdminAnyDatabase的用户作为管理用户的用户；
 >   启用访问控制，进行登录用户验证，这样创建用户才有意义。
 
-```bash
+```js
 db.auth()	#向数据库验证用户。
 db.changeUserPassword()	#更改现有用户的密码。
 db.createUser()	#创建一个新用户。
