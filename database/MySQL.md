@@ -976,6 +976,15 @@ alter table `tablename`
     select `col_name`, xxxx from `table_name` where condition group by `col_name`;
     ```
 
+-   临时关闭`sql_mode=only_full_group_by`
+
+    ```sql
+    set @@GLOBAL.sql_mode='';
+    set sql_mode ='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+    ```
+
+    
+
 #### 2. having子语句 过滤
 
 -   having与where区别：
