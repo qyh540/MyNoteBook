@@ -73,6 +73,12 @@
 ### 5. 基础命令
 
 >在不另外说明的情况下本文所有命令中的`collection`、`col`均指代集合名。使用时由读者自行修改。
+>
+>`conditionDict`为选择条件字典是`find()`、`update()`等函数需要的条件值，形如`{key：value}`
+>
+>`valueDict`为值字典，为插入或更新的新值。
+>
+>`valueDicts`为多个值字典组成的数组。
 
 #### 1. 连接Mongo Shell
 
@@ -170,7 +176,7 @@ db.collection.drop()
 db.collection.insertOne(dataDict)
 
 #插入多条记录
-db.collection.insertMany(d)
+db.collection.insertMany(dataDicts)
 ```
 
 ##### 2. 查找(Read)
@@ -269,7 +275,7 @@ db.getUser()	#返回有关指定用户的信息。
 db.getUsers()	#返回有关与数据库关联的所有用户的信息。
 db.grantRolesToUser()	#向用户授予角色及其特权。
 db.removeUser()	#不推荐使用。从数据库中删除用户。
-db.revokeRolesFromUser()	#从用户删除角色。
+db.revokeRolesFromUser(username, [{role:xxx, db:xxx},...])	#从用户删除角色。
 db.updateUser()	#更新用户数据。
 passwordPrompt()	#提示输入密码，以作为在各种mongoShell用户身份验证/管理方法中直接指定密码的替代方法。
 ```
@@ -301,5 +307,11 @@ passwordPrompt()	#提示输入密码，以作为在各种mongoShell用户身份�
 {"x": {"y": xxx}}
 {"x": ObjectId()}
 {"x": function() { /* ... */ }}
+```
+
+### 1. 集群
+
+```json
+{_id: "shiyizhonghua", members:[{_id:0, host:"114.55.236.49:27017", priority: 2},{_id:1, host:"116.62.195.199:27017", priority: 1},{_id:2, host:"47.100.193.135:27017", priority: 1},{_id:3, host:"47.98.214.74:27017", arbiterOnly:true}]}
 ```
 
