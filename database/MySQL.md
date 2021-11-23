@@ -1185,8 +1185,151 @@ where写在group by前面.
     select min(studentresult) as 最低分 from result;
     ```
 
+### 5.3 自定义函数
 
-### 5.3 MD5加密
+>   不重要，了解即可
+
+-   创建函数
+    -   functionName：函数名，同MySQL内置函数一样，大小写不敏感
+    -   varName: 形参名
+    -   varType: 形参类型，其与varName配对使用。形参数量不限( $\geq 0$)
+    -   returnVarType: 返回值类型。函数必须有且只能有一个返回值
+    -   characteristic：函数特性，下将详述
+    -   routine_body：函数体。函数体中必须含有 return 语句，当函数体为复合结构时，需要使用begin ... end 语句
+
+```sql
+CREATE  
+    [DEFINER = { user | CURRENT_USER }]
+    FUNCTION functionName ( varName varType [, ... ] )
+    RETURNS returnVarType
+    [characteristic ...] 
+    routine_body
+```
+-   函数操作
+
+```sql
+-- 查看定义
+show create function functionName;
+-- 查看状态
+show function status [like functionName];
+-- 修改特性
+alter function functionName [characteristic ...]
+-- 删除函数
+drop function [if exists] functionName；
+```
+
+-   声明变量
+
+    -   局部变量：只在函数中生效，在`begin`语句最前面声明。
+
+    ```sql
+    begin
+    	declare var [, ...] varType [defualt initVal];
+    	...
+    end
+    ```
+
+    -   用户变量：在当前连接中有效，以`@`开头，无需声明，直接赋值使用。
+
+-   变量赋值
+
+```sql
+-- 只有在set中=可以作为赋值符号使用，其他语句中应该使用:=赋值
+set var = expression [, var = expression, ...]; 
+set var := expression [, var = expression, ...];
+
+-- 使用select赋值
+select filed1 [, ...] into var1 [, ...] from tableName where conditon
+
+-- 示例
+delimiter $
+create
+    function myfunTest(idx int)
+    returns int
+    comment '测试函数'
+begin
+    declare res int;                    # 声明定义1个变量, 初值默认为 null
+    declare num1, num2 int  default 27;     # 声明定义多个变量，初值全部为27
+    declare data1, data2 int;       # 声明定义多个变量，初值全部默认为 null
+    set num2 = 23, res = num1 + num2;       # 使用set语句, = 操作符赋值
+    set data1 = 1, data2 = 1;
+    select num, price into  data1, data2 from test2 where id = idx;     # 使用 select into 语句
+    set res :=  res * (data1 + data2);      # 使用set语句, := 操作符赋值
+    return (res);
+end$
+delimiter ;
+```
+
+-   常用流程控制
+
+```sql
+-- if语句
+if condition then
+    statements
+[ elseif condition then
+    statements ]
+[ else
+    statements ]
+end if;
+
+-- while语句
+[label:] while condition do
+    statments
+end while [label]
+
+levae label;    # 跳出label所标注的循环结构相当于break
+iterate label;  # 跳过循环体的剩余部分，直接开始label所标注的下一次循环相当于continue
+
+-- 示例
+delimiter $
+create
+    function testIterate()
+    returns varchar(255)
+begin
+    declare i,j int default 0;
+    loop1: while (i<=5) do
+        set i = i + 1;
+        set j = 0;
+        while (j<=i) do
+            if(j = 3) then
+                iterate loop1;
+            end if;
+            set j = j + 1;
+        end while;
+    end while loop1;
+    return concat('i: ', i, ' j:', j);
+end$
+delimiter ;
+```
+
+-   在使用函数时函数体中需要以`;`结束一个语句，会与sql定界符冲突，故需要在创建函数前使用关键字`delimiter`修改定界符在完成创建后再更改声明。如
+
+```sql
+delimiter $  -- 将结束符修改为$
+create
+    function testIterate()
+    returns varchar(255)
+begin
+    declare i,j int default 0;
+    loop1: while (i<=5) do
+        set i = i + 1;
+        set j = 0;
+        while (j<=i) do
+            if(j = 3) then
+                iterate loop1;
+            end if;
+            set j = j + 1;
+        end while;
+    end while loop1;
+    return concat('i: ', i, ' j:', j);
+end$
+delimiter ;  -- 修改回;
+```
+
+
+
+
+### 5.4 MD5加密
 
 #### 1. MD5简介
 
@@ -1235,12 +1378,13 @@ where `name` = 'kuangshen'
   and pwd = md5('123456');
 ```
 
-### 5.4 其他
+### 5.5 其他
 
 -   参考：
     1.  [MySQL官方文档](https://dev.mysql.com/doc/refman/5.7/en/built-in-function-reference.html)
     2.  [MySQL函数大全，MySQL常用函数汇总](http://c.biancheng.net/mysql/function/)
-
+    3.  [MySQL之自定义函数 - 知乎](https://zhuanlan.zhihu.com/p/128744140)
+    
 -   其他函数
 
     ```sql
@@ -1670,6 +1814,10 @@ method(){
     -- 创建用户   用户名     ip地址                 密码
     create user user_name@host identified by 'pwd444WWW!@#';-- 不加@host默认是@%，%表示所有ip皆可访问
     
+    -- 创建角色
+    create role rolename;
+    -- 可以给角色授权再将角色给予用户，用户会拥有角色的权限。
+    
     -- 修改密码
     set password = password ('new_pwd'); -- 修改当前用户
     set password for user_name@host = password ('new_pwd'); -- 修改指定用户
@@ -1781,11 +1929,77 @@ method(){
     | SHUTDOWN                | 服务器管理             | 关闭数据库权限                                               |
     | SUPER                   | 服务器管理             | 执行kill线程权限                                             |
 
-## 十、**==规范数据库设计(三大范式)==**
+## 十、触发器与存储过程
+
+### 10.1 触发器创建
+
+>   对触发器的支持是在MySQL 5中增加的，故只有MySQL 5后才能使用触发器，每张表最多6个触发器
+
+-   触发器是一种与表操作有关的数据库对象，当触发器所在表上出现指定事件时，将调用该对象，即表的操作事件触发表上的触发器的执行。
+
+-   触发器创建语法四要素：
+
+    1.  监视地点(trigger_table): 触发器关联的表
+
+    2.  监视事件(trigger_event): 表示监视关联的表执行什么语句会触发触发器(只能有一个语句) insert/update/delete
+
+    3.  触发时间(trigger_time): 表示触发器在监视事件发生前/后(after/before)触发 
+
+    4.  触发事件(trigger_statements): 表示触发器触发后执行哪些语句(insert/update/delete)
+
+-   触发器创建语法：
+
+```sql
+create trigger trigger_name
+trigger_time
+trigger_event on trigger_table
+for each row
+trigger_statements;
+```
+
+### 10.2 触发事件
+
+-   触发事件可以是一个语句也可以是多个语句(复合体)，当是多个语句时需要使用`begin...end`语句，需要修改定界符
+
+```sql
+delimiter $
+create trigger test
+after
+insert on test_table
+for each row
+begin
+	sql1;
+	sql2;
+	...
+end$
+delimiter ;
+```
+
+-   `old`、`new`详解
+    -   在 INSERT 型触发器中，NEW 用来表示将要（BEFORE）或已经（AFTER）插入的新数据；
+    -   在 UPDATE 型触发器中，OLD 用来表示将要或已经被修改的原数据，NEW 用来表示将要或已经修改为的新据
+    -   在 DELETE 型触发器中，OLD 用来表示将要或已经被删除的原数据；
+    -   使用方法： NEW.columnName （columnName 为相应数据表某一列名）另外，OLD 是只读的，而 NEW 则可以在触发器中使用 SET 赋值，这样不会再次触发触发器，造成循环调用（如每插入一个学生前，都在其学号前加“2013”）。
+
+-   当监视事件和触发事件相同(同是insert/update)且修改同一张表时会导致循环触发触发器导致报错，需要使用`set`语句。
+
+```sql
+create trigger test
+after
+insert on test_table
+for each row
+set new.id = new.id + 111;
+```
+
+
+
+
+
+## 十一、**==规范数据库设计(三大范式)==**
 
 >   **==当数据库比较复杂时，我们就需要设计数据库==**
 
-### 10.1 对比
+### 11.1 对比
 
 -   糟糕的数据库设计：
     -   数据冗余，浪费空间
@@ -1796,7 +2010,7 @@ method(){
     -   保证数据库的完整性
     -   方便开发系统
 
-### 10.2 软件开发中，关于数据库的设计
+### 11.2 软件开发中，关于数据库的设计
 
 #### 1. 要点
 
@@ -1904,7 +2118,7 @@ method(){
       default charset = utf8 comment ='粉丝中间表';
     ```
 
-### 10.2 三大范式
+### 11.2 三大范式
 
 #### 1. 为什么需要数据规范化？
 
@@ -1934,20 +2148,20 @@ method(){
 -   有时会故意给一些表增加冗余字段，使其从多表查询变为单表查询。
 -   有时会故意增加一些计算列，使之从大数据量的查询降低为小数据量的查询如索引。
 
-### 10.3 其他
+### 11.3 其他
 
 -   参考：
     1.  [关系型数据库设计：三大范式的通俗理解 - 景寓6号 - 博客园](https://www.cnblogs.com/wsg25/p/9615100.html)
     2.  [【数据库】数据库入门（七）: 函数依赖（Functional Dependencies） - 简书](https://www.jianshu.com/p/f525c2e91fb4)
     3.  [关系型数据库的设计理论（异常、函数依赖、范式）_u013617791的专栏-CSDN博客](https://blog.csdn.net/u013617791/article/details/83041560)
 
-## 十一、**==JDBC(重点)==**
+## 十二、**==JDBC(重点)==**
 
-### 11.1 数据库驱动
+### 12.1 数据库驱动
 
 -   定义：数据库驱动是不同数据库开发商（比如oracle mysql等）为了某一种开发语言环境（比如java）能够实现数据库调用而开发的一个程序，他的作用相当于一个翻译人员，将Java中对数据库的调用语言翻译成数据库自己的数据库语言，当然这个翻译（数据库驱动）是由各个开发商针对统一的接口自定义开发的。
 
-### 11.2 JDBC简介
+### 12.2 JDBC简介
 
 >   JDBC 指 Java 数据库连接，是一种标准Java应用编程接口（ JAVA API），用来连接 Java 编程语言和广泛的数据库。JDBC API 库包含下面提到的每个任务，都是与数据库相关的常用用法。
 
@@ -1970,7 +2184,7 @@ method(){
         ```
 
 
-### 11.3 第一个JDBC程序
+### 12.3 第一个JDBC程序
 
 ```java
 package com.wlq.lesson1;
@@ -2031,7 +2245,7 @@ public class JdbcFirstDemo {
 4.  获得返回结果集ResultSet
 5.  释放连接
 
-### 11.4 Statement类
+### 12.4 Statement类
 
 >   **==JDBC中的Statement对象用于向数据库发送SQL语句，想完成对数据库的增删改查，只需要通过这个对象向数据库发送增删改查的sql语句即可==**
 >
@@ -2302,7 +2516,7 @@ public class JdbcFirstDemo {
     wlq
     ```
 
-### 11.4 PreparedStatement类
+### 12.4 PreparedStatement类
 
 >   PrepareStatement类是Statement的子类，通过预编译sql语句在传入参数来执行，相比于Statement可以防止SQL注入，效率更高。
 
@@ -2469,7 +2683,7 @@ public class JdbcFirstDemo {
     wlq
     ```
 
-### 11.5 JDBC事务
+### 12.5 JDBC事务
 
 #### 1. 代码实现
 
@@ -2533,7 +2747,7 @@ public class TestTransaction1 {
 }
 ```
 
-### 11.6 数据库连接池
+### 12.6 数据库连接池
 
 >   数据库连接 --> 执行完毕 --> 释放 --> 再连接......  释放   十分浪费系统资源
 >
